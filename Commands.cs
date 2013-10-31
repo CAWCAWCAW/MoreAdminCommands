@@ -477,6 +477,7 @@ namespace MoreAdminCommands
             {
                 player.Heal();
             }
+            args.Player.SendSuccessMessage("Healed every player");
         }
         #endregion
 
