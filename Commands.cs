@@ -470,6 +470,16 @@ namespace MoreAdminCommands
         }
         #endregion
 
+        #region HealAll
+        public static void HealAll(CommandArgs args)
+        {
+            foreach (TSPlayer player in TShock.Players)
+            {
+                player.Heal();
+            }
+        }
+        #endregion
+
         #region Ghost
         public static void Ghost(CommandArgs args)
         {

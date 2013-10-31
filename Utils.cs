@@ -227,7 +227,6 @@ namespace MoreAdminCommands
         #region getSpawnGroup
         public static void getSpawnGroup(string nGroup, TSPlayer player)
         {
-            bool flag = false;
             for (int i = 0; i < MAC.config.SpawnGroupNPCs.Count; i++)
             {
                 for (int j = 0; j < MAC.config.SpawnGroupNPCs[i].NPCList.Count; j++)

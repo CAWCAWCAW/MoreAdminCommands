@@ -128,6 +128,7 @@ namespace MoreAdminCommands
             Commands.ChatCommands.Add(new Command("mac.butcher", Cmds.ButcherNPC, "butchernpc"));
             Commands.ChatCommands.Add(new Command("mac.butcher", Cmds.ButcherNear, "butchernear"));
             Commands.ChatCommands.Add(new Command("mac.heal", Cmds.AutoHeal, "autoheal"));
+            Commands.ChatCommands.Add(new Command("mac.heal.all", Cmds.HealAll, "healall"));
             Commands.ChatCommands.Add(new Command("mac.moon", Cmds.MoonPhase, "moon"));
             Commands.ChatCommands.Add(new Command("mac.give", Cmds.ForceGive, "forcegive"));
             Commands.ChatCommands.Add(new Command("mac.view", Cmds.ViewAll, "view"));
