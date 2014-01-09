@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 
 using TShockAPI;
+using Terraria;
 
 namespace MoreAdminCommands
 {
@@ -227,25 +228,15 @@ namespace MoreAdminCommands
         #region getSpawnGroup
         public static void getSpawnGroup(string nGroup, TSPlayer player)
         {
-            for (int i = 0; i < MAC.config.SpawnGroupNPCs.Count; i++)
-            {
-                for (int j = 0; j < MAC.config.SpawnGroupNPCs[i].NPCList.Count; j++)
-                {
-                    var checkGroup = MAC.config.SpawnGroupNPCs[i].NPCList[j];
-
-                    if (checkGroup.groupname == nGroup)
-                    {
-                        foreach (KeyValuePair<string, int> pair in checkGroup.npcDetails)
+            foreach (NPCset set in MAC.config.SpawnGroupNPCs)
+                foreach (NPCobj obj in set.NPCList)
+                    if (obj.groupName == nGroup)
+                        foreach (NPCdetails details in obj.npcDetails)
                         {
-                            var mobs = TShock.Utils.GetNPCByName(pair.Key);
+                            NPC npc = TShock.Utils.GetNPCByIdOrName(details.name)[0];
 
-                            TSPlayer.Server.SpawnNPC(mobs[0].type, mobs[0].name, pair.Value,
-                                (int)player.X, (int)player.Y, 30, 30);
+                            TSPlayer.Server.SpawnNPC(npc.type, npc.name, details.amount, player.TileX, player.TileY, 50, 20);
                         }
-                        player.SendSuccessMessage("Spawned mobs from group " + nGroup);
-                    }
-                }
-            }
         }
         #endregion
     }

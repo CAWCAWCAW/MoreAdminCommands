@@ -142,6 +142,8 @@ namespace MoreAdminCommands
             #endregion
 
             Utils.SetUpConfig();
+
+            updateTimers.initializeTimers();
         }
         #endregion
 

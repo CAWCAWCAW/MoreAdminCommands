@@ -7,15 +7,27 @@ using System.IO;
 
 namespace MoreAdminCommands
 {
+    public class NPCdetails
+    {
+        public string name;
+        public int amount;
+
+        public NPCdetails(string name, int amount)
+        {
+            this.name = name;
+            this.amount = amount;
+        }
+    }
+
     public class NPCobj
     {
-        public string groupname;
-        public Dictionary<string, int> npcDetails;
+        public string groupName;
+        public List<NPCdetails> npcDetails;
 
-        public NPCobj(string gna, Dictionary<string, int> na)
+        public NPCobj(string gNa, List<NPCdetails> nD)
         {
-            groupname = gna;
-            npcDetails = na;
+            groupName = gNa;
+            npcDetails = nD;
         }
     }
 
@@ -31,7 +43,7 @@ namespace MoreAdminCommands
     public class MACconfig
     {
         public string defaultMuteAllReason = "Listen to find out";
-        public string muteAllReason = "Listen to find out";
+        public string muteAllReason = "";
         public string redPass = "";
         public string bluePass = "";
         public string greenPass = "";
@@ -77,15 +89,17 @@ namespace MoreAdminCommands
         public void Write(Stream stream)
         {
             SpawnGroupNPCs = new List<NPCset>();
-            List<NPCobj> NPCs = new List<NPCobj>();
-            NPCs.Add(new NPCobj("slimes",
-                new Dictionary<string, int>() {
-            { "green slime", 5 },
-            { "blue slime", 5},
-            { "mother slime", 5}
-            }
-            ));
-            SpawnGroupNPCs.Add(new NPCset(NPCs));
+            List<NPCobj> NPCs_Town = new List<NPCobj>();
+            NPCs_Town.Add(new NPCobj("Town NPCs", new List<NPCdetails>()
+            {
+                new NPCdetails("guide", 1), new NPCdetails("merchant", 1), new NPCdetails("nurse", 1),
+                new NPCdetails("demolitionist", 1), new NPCdetails("dryad", 1), new NPCdetails("arms dealer", 1),
+                new NPCdetails("clothier", 1), new NPCdetails("mechanic", 1), new NPCdetails("goblin tinkerer", 1),
+                new NPCdetails("wizard", 1), new NPCdetails("steampunker", 1), new NPCdetails("dye trader", 1),
+                new NPCdetails("santa claus", 1), new NPCdetails("party girl", 1), new NPCdetails("painter", 1),
+                new NPCdetails("witch doctor", 1), new NPCdetails("pirate", 1), new NPCdetails("cyborg", 1)
+            }));
+            SpawnGroupNPCs.Add(new NPCset(NPCs_Town));
 
             var str = JsonConvert.SerializeObject(this, Formatting.Indented);
             using (var sw = new StreamWriter(stream))

@@ -13,24 +13,22 @@ namespace MoreAdminCommands
     {
         public static Timer timeTimer = new Timer(1000);
         public static Timer autoKillTimer = new Timer(1000);
-        public static Timer viewAllTimer = new Timer(1000);
-        public static Timer permaBuffTimer = new Timer(1000);
-        public static Timer permaDebuffTimer = new Timer(1000);
-        public static Timer disableTimer = new Timer(1000);
+        public static Timer viewAllTimer = new Timer(100);
+        public static Timer permaBuffTimer = new Timer(100);
+        public static Timer permaDebuffTimer = new Timer(100);
+        public static Timer disableTimer = new Timer(100);
+
+        public static void initializeTimers()
+        {
+            permaBuffTimer.Elapsed += new ElapsedEventHandler(pBTimer);
+            disableTimer.Elapsed += new ElapsedEventHandler(dTimer);
+            permaDebuffTimer.Elapsed += new ElapsedEventHandler(pDTimer);
+            viewAllTimer.Elapsed += new ElapsedEventHandler(viewTimer);
+            timeTimer.Elapsed += new ElapsedEventHandler(tTimer);
+            autoKillTimer.Elapsed += new ElapsedEventHandler(aKTimer);
+        }
 
         #region PermaBuffTimer
-        public static void startPermaBuffTimer()
-        {
-            permaBuffTimer.Enabled = true;
-            permaBuffTimer.Elapsed += new ElapsedEventHandler(pBTimer);
-        }
-
-        public static void stopPermaBuffTimer()
-        {
-            permaBuffTimer.Enabled = false;
-            permaBuffTimer.Elapsed -= new ElapsedEventHandler(pBTimer);
-        }
-
         public static void pBTimer(object sender, ElapsedEventArgs args)
         {
             int count = 0;
@@ -49,25 +47,11 @@ namespace MoreAdminCommands
                 }
             }
             if (count == 0)
-                stopPermaBuffTimer();
-
-            count = 0;
+                permaBuffTimer.Enabled = false;
         }
         #endregion
 
         #region DisableTimer
-        public static void startDisableTimer()
-        {
-            disableTimer.Enabled = true;
-            disableTimer.Elapsed += new ElapsedEventHandler(dTimer);
-        }
-
-        public static void stopDisableTimer()
-        {
-            disableTimer.Enabled = false;
-            disableTimer.Elapsed -= new ElapsedEventHandler(dTimer);
-        }
-
         public static void dTimer(object sender, ElapsedEventArgs args)
         {
             int count = 0;
@@ -81,25 +65,11 @@ namespace MoreAdminCommands
             }
 
             if (count == 0)
-                stopDisableTimer();
-
-            count = 0;
+                disableTimer.Enabled = false;
         }
         #endregion
 
         #region PermaDebuffTimer
-        public static void startPermaDebuffTimer()
-        {
-            permaDebuffTimer.Enabled = true;
-            permaDebuffTimer.Elapsed += new ElapsedEventHandler(pDTimer);
-        }
-
-        public static void stopPermaDebuffTimer()
-        {
-            permaDebuffTimer.Enabled = false;
-            permaDebuffTimer.Elapsed -= new ElapsedEventHandler(pDTimer);
-        }
-
         public static void pDTimer(object sender, ElapsedEventArgs args)
         {
             int count = 0;
@@ -118,25 +88,11 @@ namespace MoreAdminCommands
                 }
             }
             if (count == 0)
-                stopPermaDebuffTimer();
-
-            count = 0;
+                disableTimer.Enabled = false;
         }
         #endregion
 
         #region ViewTimer
-        public static void startViewTimer()
-        {
-            viewAllTimer.Enabled = true;
-            viewAllTimer.Elapsed += new ElapsedEventHandler(viewTimer);
-        }
-
-        public static void stopViewTimer()
-        {
-            viewAllTimer.Enabled = false;
-            viewAllTimer.Elapsed -= new ElapsedEventHandler(viewTimer);
-        }
-
         public static void viewTimer(object sender, ElapsedEventArgs args)
         {
             int count = 0;
@@ -145,7 +101,6 @@ namespace MoreAdminCommands
                 if (player.viewAll)
                 {
                     foreach (TSPlayer tply in TShock.Players)
-                    {
                         try
                         {
                             int prevTeam = Main.player[tply.Index].team;
@@ -153,32 +108,17 @@ namespace MoreAdminCommands
                             NetMessage.SendData((int)PacketTypes.PlayerTeam, player.Index, -1, "", tply.Index);
                             Main.player[tply.Index].team = prevTeam;
                         }
-                        catch (Exception) { }
-                    }
+                        catch { }
                     count++;
                 }
 
                 if (count == 0)
-                    stopViewTimer();
-
-                count = 0;
+                    viewAllTimer.Enabled = false;
             }
         }
         #endregion
 
         #region TimeTimer
-        public static void startTimeTimer()
-        {
-            timeTimer.Enabled = true;
-            timeTimer.Elapsed += new ElapsedEventHandler(tTimer);
-        }
-
-        public static void stopTimeTimer()
-        {
-            timeTimer.Enabled = false;
-            timeTimer.Elapsed -= new ElapsedEventHandler(tTimer);
-        }
-
         public static void tTimer(object sender, ElapsedEventArgs args)
         {
             if (MAC.timeFrozen)
@@ -200,18 +140,6 @@ namespace MoreAdminCommands
         #endregion
 
         #region AutoKillTimer
-        public static void startAutoKillTimer()
-        {
-            autoKillTimer.Enabled = true;
-            autoKillTimer.Elapsed += new ElapsedEventHandler(aKTimer);
-        }
-
-        public static void stopAutoKillTimer()
-        {
-            autoKillTimer.Enabled = false;
-            autoKillTimer.Elapsed -= new ElapsedEventHandler(aKTimer);
-        }
-
         public static void aKTimer(object sender, ElapsedEventArgs args)
         {
             int count = 0;
@@ -227,9 +155,7 @@ namespace MoreAdminCommands
                 count++;
             }
             if (count == 0)
-                stopAutoKillTimer();
-
-            count = 0;
+                autoKillTimer.Enabled = false;
         }
         #endregion
     }

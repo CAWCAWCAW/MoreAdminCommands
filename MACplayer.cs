@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Terraria;
 using TShockAPI;
+using System.Timers;
 
 namespace MoreAdminCommands
 {
