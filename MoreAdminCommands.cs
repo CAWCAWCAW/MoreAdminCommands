@@ -45,7 +45,7 @@ namespace MoreAdminCommands
 
         public override string Author
         {
-            get { return "Created by DaGamesta, Maintained by WhiteX & aMoka"; }
+            get { return "DaGamesta, Maintained by WhiteX"; }
         }
 
         public override string Description
@@ -64,7 +64,6 @@ namespace MoreAdminCommands
             var Hook = ServerApi.Hooks;
 
             Hook.GameInitialize.Register(this, OnInitialize);
-            Hook.GameUpdate.Register(this, OnUpdate);
             Hook.ServerChat.Register(this, OnChat);
             Hook.NetSendData.Register(this, OnSendData);
             Hook.NetGreetPlayer.Register(this, OnJoin);
@@ -81,7 +80,6 @@ namespace MoreAdminCommands
                 var Hook = ServerApi.Hooks;
 
                 Hook.GameInitialize.Deregister(this, OnInitialize);
-                Hook.GameUpdate.Deregister(this, OnUpdate);
                 Hook.ServerChat.Deregister(this, OnChat);
                 Hook.NetSendData.Deregister(this, OnSendData);
                 Hook.NetGreetPlayer.Deregister(this, OnJoin);
@@ -463,119 +461,42 @@ namespace MoreAdminCommands
         }
         #endregion
 
-        #region OnUpdate
-        private void OnUpdate(EventArgs args)
-        {
-            //if ((DateTime.UtcNow - LastCheck).TotalSeconds >= 1)
-            //{
-            //    LastCheck = DateTime.UtcNow;
-            //if (timeFrozen)
-            //{
-            //    if (Main.dayTime != freezeDayTime)
-            //    {
-            //        if (timeToFreezeAt > 10000)
-            //        {
-            //            timeToFreezeAt -= 100;
-            //        }
-            //        else
-            //        {
-            //            timeToFreezeAt += 100;
-            //        }
-            //    }
-            //    TSPlayer.Server.SetTime(freezeDayTime, timeToFreezeAt);
-            //}
-
-            //foreach (Mplayer player in Players)
-            //{
-
-            //if (player.autoKill)
-            //{
-            //    player.TSPlayer.DamagePlayer(9999);
-            //}
-
-            //if (player.viewAll)
-            //{
-            //    foreach (TSPlayer tply in TShock.Players)
-            //    {
-            //        try
-            //        {
-            //            int prevTeam = Main.player[tply.Index].team;
-            //            Main.player[tply.Index].team = viewAllTeam;
-            //            NetMessage.SendData((int)PacketTypes.PlayerTeam, player.Index, -1, "", tply.Index);
-            //            Main.player[tply.Index].team = prevTeam;
-
-            //        }
-            //        catch (Exception) { }
-            //    }
-            //}
-
-            //if (player.isPermabuff)
-            //{
-            //    foreach (int activeBuff in player.TSPlayer.TPlayer.buffType)
-            //    {
-            //        if (!Main.debuff[activeBuff])
-            //        {
-            //            player.TSPlayer.SetBuff(activeBuff, Int16.MaxValue);
-            //        }
-            //    }
-            //}
-
-            //if (player.isPermaDebuff)
-            //{
-            //    foreach (int activeBuff in player.TSPlayer.TPlayer.buffType)
-            //    {
-            //        if (Main.debuff[activeBuff])
-            //        {
-            //            player.TSPlayer.SetBuff(activeBuff, Int16.MaxValue);
-            //        }
-            //    }
-            //}
-
-            //if (player.isDisabled)
-            //{
-            //    player.TSPlayer.SetBuff(47, 180);
-            //}
-            //}
-            //}
-        }
-        #endregion
-
         #region OnChat
         public void OnChat(ServerChatEventArgs args)
         {
             var Mplayer = Utils.GetPlayers(args.Who);
-            if (Utils.findIfPlayingCommand(args.Text) && !TShock.Players[args.Who].Group.HasPermission("ghostmode"))
-            {
-                string sb = "";
-                foreach (TSPlayer player in TShock.Players)
-                {
-                    var ply = Utils.GetPlayers(player.Index);
-                    if (player != null && player.Active && !ply.isGhost)
-                    {
-                        if (sb.Length != 0)
-                        {
-                            sb += ", ";
-                        }
-                        sb += player.Name;
-                    }
-                }
-                TShock.Players[args.Who].SendMessage(string.Format("Current players: {0}.", sb), 255, 240, 20);
-                args.Handled = true;
-            }
+            //if (Utils.findIfPlayingCommand(args.Text) && !TShock.Players[args.Who].Group.HasPermission("ghostmode"))
+            //{
+            //    string sb = "";
+            //    foreach (TSPlayer player in TShock.Players)
+            //    {
+            //        var ply = Utils.GetPlayers(player.Index);
+            //        if (player != null && player.Active && !ply.isGhost)
+            //        {
+            //            if (sb.Length != 0)
+            //            {
+            //                sb += ", ";
+            //            }
+            //            sb += player.Name;
+            //        }
+            //    }
+            //    TShock.Players[args.Who].SendMessage(string.Format("Current players: {0}.", sb), 255, 240, 20);
+            //    args.Handled = true;
+            //}
 
-            if ((muteAll) && (!TShock.Players[args.Who].Group.HasPermission("mute")) && args.Text.StartsWith("/me"))
-            {
-                TShock.Players[args.Who].SendMessage("You cannot use the /me command, you are muted.", Color.Red);
-                args.Handled = true;
-                return;
-            }
+            //if ((muteAll) && (!TShock.Players[args.Who].Group.HasPermission("mute")) && args.Text.StartsWith("/me"))
+            //{
+            //    TShock.Players[args.Who].SendMessage("You cannot use the /me command, you are muted.", Color.Red);
+            //    args.Handled = true;
+            //    return;
+            //}
 
-            if (args.Text.StartsWith("/tp "))
-            {
-                string tempText = args.Text;
-                tempText = tempText.Remove(0, 1);
-                Utils.parseParameters(tempText);
-            }
+            //if (args.Text.StartsWith("/tp "))
+            //{
+            //    string tempText = args.Text;
+            //    tempText = tempText.Remove(0, 1);
+            //    Utils.parseParameters(tempText);
+            //}
 
             if (muteAll && !TShock.Players[args.Who].Group.HasPermission("mute"))
             {
