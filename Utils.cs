@@ -217,10 +217,8 @@ namespace MoreAdminCommands
         #region getDistance
         public static bool getDistance(Vector2 player, Vector2 mob, int radius)
         {
-            if (Math.Sqrt((int)(mob.X - player.X) ^ 2 + (int)(mob.Y - player.Y) ^ 2) < radius)
-            {
+            if (Math.Sqrt(((int)(mob.X - player.X) ^ 2) + ((int)(mob.Y - player.Y) ^ 2)) <= radius)
                 return true;
-            }
             return false;
         }
         #endregion

@@ -124,15 +124,12 @@ namespace MoreAdminCommands
 
                     if (itemMatches.Count > 1)
                     {
-                        List<string> items = new List<string>();
-                        itemMatches.ForEach(Item => items.Add(Item.name));
-
-                        TShock.Utils.SendMultipleMatchError(args.Player, items);
+                        TShock.Utils.SendMultipleMatchError(args.Player, itemMatches.Select(I => I.name));
                     }
 
                     else if (itemMatches.Count == 1)
                     {
-                        args.Player.SendSuccessMessage("One item matches your query: " + itemMatches[0]);
+                        args.Player.SendSuccessMessage("One item matches your query: " + itemMatches[0].name);
                     }
                 }
             }
@@ -156,15 +153,12 @@ namespace MoreAdminCommands
 
                     if (mobMatches.Count > 1)
                     {
-                        List<string> mobs = new List<string>();
-                        mobMatches.ForEach(m => mobs.Add(m.name));
-
-                        TShock.Utils.SendMultipleMatchError(args.Player, mobs);
+                        TShock.Utils.SendMultipleMatchError(args.Player, mobMatches.Select(m => m.name));
                     }
 
                     else if (mobMatches.Count == 1)
                     {
-                        args.Player.SendSuccessMessage("One mob matches your query: " + mobMatches[0]);
+                        args.Player.SendSuccessMessage("One mob matches your query: " + mobMatches[0].name);
                     }
                 }
             }
@@ -1089,24 +1083,25 @@ namespace MoreAdminCommands
             int nearby = 50;
             if (args.Parameters.Count > 0)
             {
-                try
+                if (!int.TryParse(args.Parameters[0], out nearby))
                 {
-                    nearby = Convert.ToInt32(args.Parameters[0]);
+                    args.Player.SendErrorMessage("Improper Syntax. Proper Syntax: /butchernear [distance]"); 
+                    return;
                 }
-                catch { args.Player.SendErrorMessage("Improper Syntax. Proper Syntax: /butchernear [distance]"); return; }
             }
             int killcount = 0;
             for (int i = 0; i < Main.npc.Length; i++)
             {
                 if ((Main.npc[i].active &&
-                    Utils.getDistance(new Vector2(args.Player.X, args.Player.Y), Main.npc[i].position, nearby)))
+                    Utils.getDistance(args.Player.TPlayer.position, Main.npc[i].position, nearby)))
                 {
                     TSPlayer.Server.StrikeNPC(i, 99999, 1f, 1);
                     killcount++;
                 }
             }
-            args.Player.SendInfoMessage(string.Format("Killed {0} NPC(s) within a radius of " + nearby.ToString() + " blocks.", killcount));
-            TSPlayer.All.SendInfoMessage(string.Format("{0} killed {1} NPC(s)", args.Player.Name, killcount));
+            args.Player.SendInfoMessage(string.Format("Killed {0} NPC(s) within a radius of {1} blocks.", killcount, nearby));
+            TSPlayer.All.SendInfoMessage(string.Format("{0} killed {1} NPC{2}", args.Player.Name, killcount,
+                killcount == 0 || killcount > 1 ? "s" : ""));
         }
         #endregion
 
@@ -1122,7 +1117,8 @@ namespace MoreAdminCommands
                     killcount++;
                 }
             }
-            TSPlayer.All.SendInfoMessage(string.Format("{0} killed {1} NPCs.", args.Player.Name, killcount));
+            TSPlayer.All.SendInfoMessage(string.Format("{0} killed {1} NPC{2}.", args.Player.Name, killcount,
+                killcount == 0 || killcount > 1 ? "s" : ""));
         }
         #endregion
 
