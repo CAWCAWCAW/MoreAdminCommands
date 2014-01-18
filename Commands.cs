@@ -458,11 +458,16 @@ namespace MoreAdminCommands
         #region HealAll
         public static void HealAll(CommandArgs args)
         {
+            int healCount = 0;
             foreach (TSPlayer player in TShock.Players)
             {
-                player.Heal();
+                if (player != null && player.ConnectionAlive && player.Active)
+                {
+                    player.Heal();
+                    healCount++;
+                }
             }
-            args.Player.SendSuccessMessage("Healed every player");
+            args.Player.SendSuccessMessage("Healed {0} player{1}", healCount, healCount == 0 || healCount > 1 ? "s" : "");
         }
         #endregion
 
@@ -924,7 +929,8 @@ namespace MoreAdminCommands
                     MAC.config.muteAllReason = MAC.config.defaultMuteAllReason;
 
                 foreach (TSPlayer player in TShock.Players)
-                    if (!player.mute && !player.Group.HasPermission(Permissions.mute))
+                    if (player != null && player.Active && player.ConnectionAlive &&
+                        !player.mute && !player.Group.HasPermission(Permissions.mute))
                     {
                         player.mute = true;
                         muteCount++;
