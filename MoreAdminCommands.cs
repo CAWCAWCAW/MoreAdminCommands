@@ -17,7 +17,7 @@ using System.Threading;
 
 namespace MoreAdminCommands
 {
-    [ApiVersion(1, 14)]
+    [ApiVersion(1, 15)]
     public class MAC : TerrariaPlugin
     {
         public static MACconfig config { get; set; }
